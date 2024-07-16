@@ -1,5 +1,6 @@
 class FollowRequestsController < ApplicationController
   before_action :set_follow_request, only: %i[ show edit update destroy ]
+  before_action :is_an_authorized_user, only: [:destroy, :create, :show, :edit, :update]
 
   # GET /follow_requests or /follow_requests.json
   def index
@@ -61,6 +62,13 @@ class FollowRequestsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_follow_request
       @follow_request = FollowRequest.find(params[:id])
+    end
+
+    def is_an_authorized_user
+      @follow_request = FollowRequest.find(params[:id])
+      if current_user.id != @follow_request.recipient_id
+        redirect_back fallback_location: root_url, alert: "Not authorized"
+      end
     end
 
     # Only allow a list of trusted parameters through.
