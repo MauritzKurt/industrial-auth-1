@@ -14,58 +14,60 @@
       </div>
     </div>
 
-    <div class="row mb-4">
-      <div class="col">
-        <%=
+    <% if current_user == @user %>
+      <div class="row mb-4">
+        <div class="col">
+          <%=
           link_to "#",
             data: { 
               bs_toggle: "modal", 
               bs_target: "##{dom_id(user)}_followers"
             } do %>
 
-          <span class="font-weight-bold">
-            <%= user.followers.size %>
-          </span>
-          
-          followers
+            <span class="font-weight-bold">
+              <%= user.followers.size %>
+            </span>
 
-        <% end %>
-      </div>
+            Followers
 
-      <div class="col">
-        <%=
+          <% end %>
+        </div>
+
+        <div class="col">
+          <%=
           link_to "#",
             data: { 
               bs_toggle: "modal", 
               bs_target: "##{dom_id(user)}_following"
             } do %>
 
-          <span class="font-weight-bold">
-            <%= user.leaders.size %>
-          </span>
-          
-          following
+            <span class="font-weight-bold">
+              <%= user.leaders.size %>
+            </span>
 
-        <% end %>
-      </div>
+            following
 
-      <div class="col">
-        <%=
+          <% end %>
+        </div>
+
+        <div class="col">
+          <%=
           link_to "#",
             data: { 
               bs_toggle: "modal", 
               bs_target: "##{dom_id(user)}_pending"
             } do %>
 
-          <span class="font-weight-bold">
-            <%= user.pending.size %>
-          </span>
-          
-          pending
+            <span class="font-weight-bold">
+              <%= user.pending.size %>
+            </span>
 
-        <% end %>
+            pending
+
+          <% end %>
+        </div>
       </div>
-    </div>
+    <% end %>
 
     <div class="row mb-3">
       <div class="col">
