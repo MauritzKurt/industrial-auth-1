@@ -1,19 +1,20 @@
 class FollowRequestPolicy < ApplicationPolicy
-  class Scope < Scope
-    def resolve
-      scope.where(recipient_id: user.id) # Only show follow requests where the user is the recipient
-    end
+  attr_reader :user, :follow_request
+
+  def initialize(user, follow_request)
+    @user = user
+    @follow_request = follow_request
   end
 
   def create?
-    true # Anyone can create a follow request
+    true
+  end
+  
+  def update?
+    user == follow_request.sender || follow_request.recipient
   end
 
   def destroy?
-    user == record.sender || user == record.recipient # Only the sender or recipient can destroy the request
-  end
-
-  def update?
-    user == record.recipient # Only the recipient can update the status of the request
+    update?
   end
 end

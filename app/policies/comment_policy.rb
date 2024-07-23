@@ -1,22 +1,32 @@
 class CommentPolicy < ApplicationPolicy
-  class Scope < Scope
-    def resolve
-      # Photos where user is public or user is comment's author
-      scope.includes(:photo).where('users.private = ? OR comments.author_id = ?', false, user.id).references(:photo)
-    end
+  attr_reader :user, :comment
+
+  def initialize(user, comment)
+    @user = user
+    @comment = comment
+  end
+
+  def show?
+    true
+  end
+
+  def new?
+    create?
+  end
+
+  def create?
+    user == comment.owner || !comment.author.private? || comment.owner.followers.include?(user)
+  end
+
+  def edit?
+    user == comment.author
   end
 
   def update?
-    is_author?
+    edit?
   end
 
   def destroy?
-    is_author?
-  end
-
-  private
-
-  def is_author?
-    user.id == record.author.id
+    user == comment.author
   end
 end

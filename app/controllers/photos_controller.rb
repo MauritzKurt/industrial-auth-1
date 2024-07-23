@@ -1,28 +1,17 @@
 class PhotosController < ApplicationController
   before_action :set_photo, only: %i[show edit update destroy]
   before_action :authorize_resource
-  
-  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
-  # GET /photos or /photos.json
-  def index
-    @photos = policy_scope(Photo.all)
-  end
-
-  # GET /photos/1 or /photos/1.json
   def show
   end
 
-  # GET /photos/new
   def new
     @photo = Photo.new
   end
 
-  # GET /photos/1/edit
   def edit
   end
 
-  # POST /photos or /photos.json
   def create
     @photo = Photo.new(photo_params)
     @photo.owner = current_user
@@ -38,7 +27,6 @@ class PhotosController < ApplicationController
     end
   end
 
-  # PATCH/PUT /photos/1 or /photos/1.json
   def update
     respond_to do |format|
       if @photo.update(photo_params)
@@ -51,11 +39,10 @@ class PhotosController < ApplicationController
     end
   end
 
-  # DELETE /photos/1 or /photos/1.json
   def destroy
     @photo.destroy
     respond_to do |format|
-      format.html { redirect_to photos_url, notice: "Photo was successfully destroyed." }
+      format.html { redirect_back_or_to "/#{@photo.owner.id}", notice: "Photo was successfully destroyed." }
       format.json { head :no_content }
     end
   end

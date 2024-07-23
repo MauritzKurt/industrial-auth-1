@@ -6,25 +6,16 @@ class LikesController < ApplicationController
   
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
-  # GET /likes
-  def index
-    @likes = policy_scope(Like).includes(:photo)
-  end
-
-  # GET /likes/1 or /likes/1.json
   def show
   end
 
-  # GET /likes/new
   def new
     @like = Like.new
   end
 
-  # GET /likes/1/edit
   def edit
   end
 
-  # POST /likes or /likes.json
   def create
     @like = @photo.likes.build(fan: current_user)
     respond_to do |format|
@@ -38,7 +29,6 @@ class LikesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /likes/1 or /likes/1.json
   def update
     respond_to do |format|
       if @like.update(like_params)
@@ -51,7 +41,6 @@ class LikesController < ApplicationController
     end
   end
 
-  # DELETE /likes/1 or /likes/1.json
   def destroy
     @like.destroy
     respond_to do |format|

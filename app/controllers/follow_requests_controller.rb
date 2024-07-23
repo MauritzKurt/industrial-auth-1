@@ -4,25 +4,16 @@ class FollowRequestsController < ApplicationController
 
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
-  # GET /follow_requests or /follow_requests.json
-  def index
-    @follow_requests = policy_scope(FollowRequest).all
-  end
-
-  # GET /follow_requests/1 or /follow_requests/1.json
   def show
   end
 
-  # GET /follow_requests/new
   def new
     @follow_request = FollowRequest.new
   end
 
-  # GET /follow_requests/1/edit
   def edit
   end
 
-  # POST /follow_requests or /follow_requests.json
   def create
     @follow_request = FollowRequest.new(follow_request_params)
     @follow_request.sender = current_user
@@ -38,7 +29,6 @@ class FollowRequestsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /follow_requests/1 or /follow_requests/1.json
   def update
     respond_to do |format|
       if @follow_request.update(follow_request_params)
@@ -51,7 +41,6 @@ class FollowRequestsController < ApplicationController
     end
   end
 
-  # DELETE /follow_requests/1 or /follow_requests/1.json
   def destroy
     @follow_request.destroy
     respond_to do |format|
