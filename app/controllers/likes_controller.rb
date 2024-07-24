@@ -1,28 +1,23 @@
 class LikesController < ApplicationController
-  before_action :set_like, only: %i[ show edit update destroy ]
+  before_action :set_like, only: [:destroy]
+  before_action :set_photo, only: [:create]
+  before_action -> { authorize @like || Like }
+  before_action :authorize_create_action, only: [:create]
+  
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
-  # GET /likes or /likes.json
-  def index
-    @likes = Like.all
-  end
-
-  # GET /likes/1 or /likes/1.json
   def show
   end
 
-  # GET /likes/new
   def new
     @like = Like.new
   end
 
-  # GET /likes/1/edit
   def edit
   end
 
-  # POST /likes or /likes.json
   def create
-    @like = Like.new(like_params)
-
+    @like = @photo.likes.build(fan: current_user)
     respond_to do |format|
       if @like.save
         format.html { redirect_to @like, notice: "Like was successfully created." }
@@ -34,7 +29,6 @@ class LikesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /likes/1 or /likes/1.json
   def update
     respond_to do |format|
       if @like.update(like_params)
@@ -47,7 +41,6 @@ class LikesController < ApplicationController
     end
   end
 
-  # DELETE /likes/1 or /likes/1.json
   def destroy
     @like.destroy
     respond_to do |format|
@@ -57,13 +50,20 @@ class LikesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_like
-      @like = Like.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def like_params
-      params.require(:like).permit(:fan_id, :photo_id)
-    end
+  def set_photo
+    @photo = Photo.find(params[:like][:photo_id])
+  end
+
+  def set_like
+    @like = Like.find(params[:id])
+  end
+
+  def authorize_create_action
+    authorize @photo, :create_like?
+  end
+
+  def record_not_found
+    redirect_to likes_path, alert: 'Like not found.'
+  end
 end

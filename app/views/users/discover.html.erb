@@ -1,18 +1,21 @@
-<div class="row mb-4">
-  <div class="col-md-6 offset-md-3">
-    <h1 class="display-4">
-      discover
-
-    </h1>
-    
-    <p class="lead text-muted">posts liked by people you follow</p>
-  </div>
-</div>
-
-<% @user.discover.each do |photo| %>
+<% if policy(@user).show_discover? %>
   <div class="row mb-4">
     <div class="col-md-6 offset-md-3">
-      <%= render "photos/photo", photo: photo %>
+      <h1 class="display-4">
+        discover
+      </h1>
+
+      <p class="lead text-muted">posts liked by people you follow</p>
     </div>
   </div>
+
+  <% @user.discover.each do |photo| %>
+    <div class="row mb-4">
+      <div class="col-md-6 offset-md-3">
+        <%= render "photos/photo", photo: photo %>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  Stop that
 <% end %>
