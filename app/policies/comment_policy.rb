@@ -15,7 +15,7 @@ class CommentPolicy < ApplicationPolicy
   end
 
   def create?
-    user == comment.owner || !comment.author.private? || comment.owner.followers.include?(user)
+    user == comment.owner || !comment.photo.owner.private? || comment.owner.followers.include?(user)
   end
 
   def edit?

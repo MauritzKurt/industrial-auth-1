@@ -1,7 +1,7 @@
 class LikesController < ApplicationController
   before_action :set_like, only: [:destroy]
   before_action :set_photo, only: [:create]
-  before_action :authorize_resource
+  before_action -> { authorize @like || Like }
   before_action :authorize_create_action, only: [:create]
   
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
@@ -57,10 +57,6 @@ class LikesController < ApplicationController
 
   def set_like
     @like = Like.find(params[:id])
-  end
-
-  def authorize_resource
-    authorize @like || Like
   end
 
   def authorize_create_action
